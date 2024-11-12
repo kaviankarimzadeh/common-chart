@@ -1,4 +1,4 @@
-{{- if .Values.service.enabled }}
+{{- define "common-chart.service" }}
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,5 +1,4 @@
 {{- define "common-chart.configmap" }}
-{{- if .enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,6 +6,5 @@ metadata:
 data:
 {{- range $key, $value := .data }}
   {{ $key }}: {{ $value | quote }}
-{{- end }}
 {{- end }}
 {{- end }}

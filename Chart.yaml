@@ -2,4 +2,4 @@ apiVersion: v2
 name: common
 description: A Helm chart providing base templates for k8s resources
 type: library #is used for charts that don't deploy resources directly but provide templates that other charts can reuse.
-version: 0.1.1
+version: 0.1.2

@@ -1,0 +1,12 @@
+{{- range .Values.configmaps }}
+{{- if .enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common-chart.fullname" $ }}-{{ .name }}
+data:
+{{- range $key, $value := .data }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- end }}

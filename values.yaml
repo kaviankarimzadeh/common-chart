@@ -1,0 +1,39 @@
+deployment:
+  enabled: true
+  replicas: 1
+  image:
+    repository: ""
+    tag: ""
+  containerPort: 80
+  podLabels: {}
+    # custom-label: "example-label"
+  podAnnotations: {}
+    # custom-annotation: "example-annotation"
+  env: []
+    # - name: ENV_VAR_1
+    #   value: "value1"
+  volumeMounts:
+    configmaps: []
+      # - name: app-config
+      #   mountPath: /etc/config/app-config
+    secrets: []
+      # - name: app-secret
+      #   mountPath: /etc/secrets/app-secret
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+configmaps: []
+  # - name: app-config
+  #   enabled: true
+  #   data:
+  #     config-key: "config-value"
+
+secrets: []
+  # - name: app-secret
+  #   enabled: true
+  #   data:
+  #     password: "my-password"

@@ -1,0 +1,55 @@
+{{- if .Values.deployment.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "common-chart.fullname" . }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "common-chart.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "common-chart.fullname" . }}
+        {{- with .Values.deployment.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- with .Values.deployment.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+        - name: {{ include "common-chart.fullname" . }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.deployment.containerPort }}
+          env:
+            {{- range .Values.deployment.env }}
+            - name: {{ .name }}
+              {{- if .value }}
+              value: {{ .value | quote }}
+            {{- end }}
+          volumeMounts:
+            {{- range .Values.deployment.volumeMounts.configmaps }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+            {{- end }}
+            {{- range .Values.deployment.volumeMounts.secrets }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+              readOnly: true
+            {{- end }}
+      volumes:
+        {{- range .Values.deployment.volumeMounts.configmaps }}
+        - name: {{ .name }}
+          configMap:
+            name: {{ include "common-chart.fullname" $ }}-{{ .name }}
+        {{- end }}
+        {{- range .Values.deployment.volumeMounts.secrets }}
+        - name: {{ .name }}
+          secret:
+            secretName: {{ include "common-chart.fullname" $ }}-{{ .name }}
+        {{- end }}
+{{- end }}
